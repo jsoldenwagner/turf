@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NPMap Layers Control Example</title>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="http://www.nps.gov/lib/bootstrap/3.3.2/css/nps-bootstrap.min.css" rel="stylesheet">
+    <script src="turf.js" charset="utf-8"></script>
+    <script src="myPoints.js" type="text/javascript"></script>
+    <script src="myPoints2.js" type="text/javascript"></script>
+
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body,
+      #map {
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+  	<div id="map" style="height:100%;width:100%;"></div>
+    <script>
+
+    var NPMap = {
+center: {
+  lat: 37.87810535842238,
+  lng: -119.54910278320312
+},
+div: 'map',
+measureControl: true,
+hooks: {
+  init: function (callback) {
+
+    /*var polygon = turf.polygon([
+                    [-119.581869, 38.181767],
+                    [-119.688473, 37.637480],
+                    [-119.570807, 38.178185]
+                  ]); */
+                  var poly = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"title": "myRect"},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.42207336425781,
+              37.67947293019486
+            ],
+            [
+              -119.42207336425781,
+              37.78753873820529
+            ],
+            [
+              -119.24835205078125,
+              37.78753873820529
+            ],
+            [
+              -119.24835205078125,
+              37.67947293019486
+            ],
+            [
+              -119.42207336425781,
+              37.67947293019486
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+};
+                  var centroidPt = turf.centroid(poly);
+
+                  //L.geoJson(centroidPt).addTo(NPMap.config.L);
+
+                  //L.geoJson(myPoints).addTo(NPMap.config.L);
+
+                  var myHull = turf.convex(myPoints);
+
+                  var myHull2 = turf.convex(myPoints2);
+
+                  L.geoJson(myHull).addTo(NPMap.config.L);
+
+                  L.geoJson(myHull2).addTo(NPMap.config.L);
+
+                  //L.geoJson(myPoints2).addTo(NPMap.config.L);
+
+                  //L.geoJson(poly, {onEachFeature: function(feature, layer){layer.bindPopup(feature.properties.title);}}).addTo(NPMap.config.L);
+
+                  L.geoJson(poly, {weight: 7, color: 'green', fillColor: 'red', fillOpacity: 0.5}).addTo(NPMap.config.L);
+
+
+                  //L.marker([38.181767, -119.581869]).addTo(NPMap.config.L);
+
+    callback();
+  }
+},
+
+plugins: [/*{
+    js: 'https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'
+  }, */
+  {js: 'myPoints.js'},
+  {
+    js: 'https://code.jquery.com/jquery-1.11.0.min.js'
+  }],
+
+
+        zoom: 9
+      };
+      var script = document.createElement('script');
+
+      script.src = 'http://www.nps.gov/lib/npmap.js/3.0.7/npmap-bootstrap.min.js';
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>
